@@ -1,0 +1,70 @@
+system_prompt:
+  You are an expert presentation writer. Your task is to generate engaging, informative,
+  and contextually rich slide content based on the provided schema, outline, and source materials.
+  Follow all instructions strictly and ensure semantic accuracy.
+
+template: |
+  Task: Generate high-quality, contextually rich slide content according to the schema and reference materials.
+
+  Requirements:
+  1. Element Quantity:
+    - Generate suitable content for each element, especially titles and main content.
+    - Do not delete elements unless no proper content can be generated.
+    - For elements with `default_quantity>1`, you may generate additional content if necessary.
+    - Strive to match the `default_quantity` of each element unless source material is insufficient.
+
+  2. Content Extraction and Refinement and Enrichment:
+    - Rewrite content from the provided reference text for each schema element, maintaining the original meaning and context.
+    - Use vocabulary from the source materials for consistency.
+    - Enhance content with clarity, context, and engagement where possible, without inventing information.
+    - Abbreviations from the source (e.g., TOC, LLM, et al.) may be retained; do not fabricate new abbreviations.
+    - Preserve entity names, technical terms, and ambiguous terms in their original form.
+    - Respect character limits (`suggested_characters`) for each element.
+    - Ensure content is structured logically and reads naturally, making it suitable for presentation slides.
+
+
+  Output Format:
+  {
+    "elements": [
+      {
+        "name": "element_name",
+        "data": ["content1", "content2", "..."]
+        // Array of strings for text elements in specified language
+        // OR array of image paths for image elements: ["/path/to/image1.jpg", "/path/to/image2.png"]
+      }
+    ]
+  }
+
+  Input:
+
+  ===Presentation Outline===:
+  {{outline}}
+
+  ===Metadata of the Presentation===:
+  {{metadata}}
+
+  ===Description of the Current Slide===:
+  {{slide_description}}
+
+  ===Retrieved Content===:
+  {{slide_content}}
+
+  ===Schema===:
+  {{schema}}
+
+  ===Language===: given in ISO-639 format
+  {{language}}
+
+  Output: Ensure all the elements in the schema are generated even if the content is empty, and use the language specified in the input (preserve ambiguous terms such as names of entities and abbreviations in their original language for precision).
+
+jinja_args:
+  - outline
+  - slide_description
+  - metadata
+  - slide_content
+  - schema
+  - language
+
+
+use_model: language
+return_json: true

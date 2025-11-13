@@ -1,0 +1,67 @@
+system_prompt: |
+  You are an intelligent assistant specialized in selecting the most suitable PowerPoint layout
+  from a predefined set of options. You must reason step-by-step about layout fit — but output
+  only clean JSON. Your decision should balance text density, number of elements, and visual
+  requirements (image vs. text). Focus purely on *how* content is visually structured, not *what*
+  the topic is about. Always output parsable JSON. If unsure, select the closest layout and provide concise reasoning.
+
+template: |
+  Input Information:
+  • Source Content: The textual content for the current slide (may be empty).
+  • Image Information: Descriptions or captions of images provided for this slide (may be empty).
+  • Outline & Description: Overall presentation structure and the purpose of this slide.
+  • Layout Options: A list of available layouts. Each layout includes:
+      - name: layout name (e.g., "Opening", "Two-Column Image-Text")
+      - elements: element name, type ("image" or "text"), and constraints such as length or character limits.
+
+  Task Instructions:
+  1. Choose the single best-fitting layout for the slide based on:
+     - **Content Fit:** Does the text quantity and type align with the layout’s elements and character range?
+     - **Element Count Fit:** Does the number of text and image elements match the given inputs?
+     - **Theme Relevance:** Does the layout purpose (name/description) suit the slide’s described intent?
+     - **Image Relevance:** If images are relevant and enhance clarity, prioritize image-based layouts.
+       If text dominates or no image is present, choose a text-only layout.
+  2. If no clear match exists, choose the *closest* layout based on structure (number of elements and type).
+  3. If slide content or images are missing, choose the layout based on outline and element count.
+  4. Never invent or rename layouts; always select from the provided list.
+
+  Output Format Rules:
+  - Output must be valid JSON only.
+  - Include exactly two keys:
+    • "layout": the chosen layout name (must exactly match one from Layout Options)
+    • "reasoning": a concise explanation (1–3 sentences) describing why it fits best
+  - Keep reasoning concise.
+  - Do not output additional text, markdown, or commentary.
+
+
+   Example Output:
+  {
+    "layout": "Two-Column Image-Text",
+    "reasoning": "The slide has moderate-length text describing two main points and one relevant image.
+    The Two-Column Image-Text layout supports one image and one text block, balancing visuals and explanation.
+    Other options either have too many image slots or lack space for descriptive text."
+  }
+
+  Input:
+  Outline: {{ outline }}
+
+  Current Slide Description:
+  {{ slide_description }}
+
+  Slide Content:
+  {{ slide_content }}
+
+  Layout Options:
+  {{ available_layouts}}
+
+
+  Output: Return valid JSON containing both `layout` and `reasoning`.
+
+jinja_args:
+  - outline
+  - slide_description
+  - slide_content
+  - available_layouts
+
+use_model: language
+return_json: true
