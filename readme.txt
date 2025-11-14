@@ -33,3 +33,11 @@ export GROQ_API=""
 mineru-api --host 0.0.0.0 --port 8000
 python3 pptagent_ui/backend.py
  npm run serve-    in cd pptagent_ui
+
+outputs-
+has default reference ppt 
+https://drive.google.com/drive/folders/1ZU9UI3LjHV6xnoBERUbrzzAVLG7lYF2y?usp=sharing
+
+before running add default reference ppt files in runs and change default file in backend.py 
+
+
